@@ -2,7 +2,7 @@
 
 namespace Time
 {
-    public struct Time : IEquatable<Time>
+    public struct Time : IEquatable<Time>, IComparable<Time>
     {
         private byte _hour, _minute, _second;
         public readonly byte Hour => _hour;
@@ -71,6 +71,38 @@ namespace Time
             else
                 return false;
         }
+
+        public static bool Equals(Time t1, Time t2)
+        {
+            return t1.Equals(t2);
+        }
+
+        public override int GetHashCode() => (Hour, Minute, Second).GetHashCode();
+
+
+        public int CompareTo(Time other)
+        {
+            if (this.Equals(other)) return 0;
+
+            if (this.Hour != other.Hour)
+                return this.Hour.CompareTo(other.Hour);
+
+            if (this.Minute != other.Minute)
+                return this.Minute.CompareTo(other.Minute);
+
+            return this.Second.CompareTo(other.Second);
+        }
+
+        public static bool operator ==(Time t1, Time t2) => Equals(t1, t2);
+        public static bool operator !=(Time t1, Time t2) => !(t1 == t2);
+
+        public static bool operator <(Time t1, Time t2) => t1.CompareTo(t2) < 0;
+        public static bool operator >(Time t1, Time t2) => t1.CompareTo(t2) > 0;
+        public static bool operator <=(Time t1, Time t2) => t1.CompareTo(t2) <= 0;
+        public static bool operator >=(Time t1, Time t2) => t1.CompareTo(t2) >= 0;
+        
+
+
 
         /* private byte checkValue(byte value, int min, int max)
          {
