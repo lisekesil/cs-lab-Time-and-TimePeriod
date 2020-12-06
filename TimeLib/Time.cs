@@ -41,13 +41,6 @@ namespace Time
             this._minute = checkValue(byte.Parse(timeArr[1]),0,59);
             this._second = checkValue(byte.Parse(timeArr[2]),0,59);
 
-/*            byte checkValue(byte value, int min, int max)
-            {
-                if (value >= min && value <= max)
-                    return value;
-                else
-                    throw new ArgumentException();
-            }*/
         }
 
         public override string ToString() => $"{this.Hour.ToString("D2")}:{this.Minute.ToString("D2")}:{this.Second.ToString("D2")}";
@@ -99,8 +92,21 @@ namespace Time
         public static bool operator <=(Time t1, Time t2) => t1.CompareTo(t2) <= 0;
         public static bool operator >=(Time t1, Time t2) => t1.CompareTo(t2) >= 0;
 
+        public static Time operator +(Time t1, TimePeriod tp1) => t1.Plus(tp1);
 
+        public Time Plus (TimePeriod tp1)
+        {
+            var seconds = this.Hour * 3600 + this.Minute * 60 + this.Second + tp1.Seconds;
+            var newHour = (byte)(seconds / 3600 > 23 ? (seconds / 3600) % 24 : seconds / 3600);
+            var newMinute = (byte)((seconds / 60) % 60);
+            var newSecond = (byte)(seconds % 60);
 
+            return new Time(newHour, newMinute, newSecond);
+        }
+
+        public static Time Plus(Time t1, TimePeriod tp1) => t1.Plus(tp1);
+
+     
 
         private static byte checkValue(byte value, int min, int max)
         {

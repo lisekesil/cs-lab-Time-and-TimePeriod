@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Time
 {
-    public struct TimePeriod : IEquatable<TimePeriod>
+    public struct TimePeriod : IEquatable<TimePeriod>, IComparable<TimePeriod>
     {
         private long _seconds;
         public readonly long Seconds => _seconds;
@@ -50,16 +50,6 @@ namespace Time
             return $"{hours.ToString("D2")}:{minutes.ToString("D2")}:{seconds.ToString("D2")}";
         }
 
-        private static byte checkValue(byte value, int min, int max)
-        {
-            if (value >= min && value <= max)
-                return value;
-            else
-                throw new ArgumentException();
-        }
-
-        private static long ParseTimeToSeconds(Time t1) => t1.Hour * 3600 + t1.Minute * 60 + t1.Second;
-
         public bool Equals(TimePeriod other)
         {
             if (Object.ReferenceEquals(this, other)) return true;
@@ -84,7 +74,34 @@ namespace Time
 
         public override int GetHashCode() => Seconds.GetHashCode();
 
+        public int CompareTo(TimePeriod other)
+        {
+            if (this.Equals(other)) return 0;
+
+            return this.Seconds.CompareTo(other.Seconds);
+        }
+
         public static bool operator ==(TimePeriod t1, TimePeriod t2) => Equals(t1, t2);
         public static bool operator !=(TimePeriod t1, TimePeriod t2) => !(t1 == t2);
+
+        public static bool operator <(TimePeriod t1, TimePeriod t2) => t1.CompareTo(t2) < 0;
+        public static bool operator >(TimePeriod t1, TimePeriod t2) => t1.CompareTo(t2) > 0;
+        public static bool operator <=(TimePeriod t1, TimePeriod t2) => t1.CompareTo(t2) <= 0;
+        public static bool operator >=(TimePeriod t1, TimePeriod t2) => t1.CompareTo(t2) >= 0;
+
+        public static TimePeriod operator +(TimePeriod t1, TimePeriod t2) => t1.Plus(t2);
+
+        public TimePeriod Plus(TimePeriod otherTimePeriod) => new TimePeriod(this.Seconds + otherTimePeriod.Seconds);
+        public static TimePeriod Plus(TimePeriod tp1, TimePeriod tp2) => new TimePeriod(tp1.Seconds + tp2.Seconds);
+
+        private static byte checkValue(byte value, int min, int max)
+        {
+            if (value >= min && value <= max)
+                return value;
+            else
+                throw new ArgumentException();
+        }
+
+        private static long ParseTimeToSeconds(Time t1) => t1.Hour * 3600 + t1.Minute * 60 + t1.Second;
     }
 }
