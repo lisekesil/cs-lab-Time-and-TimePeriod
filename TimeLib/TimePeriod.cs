@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Time
 {
-    public struct TimePeriod
+    public struct TimePeriod : IEquatable<TimePeriod>
     {
         private long _seconds;
         public readonly long Seconds => _seconds;
@@ -13,8 +13,6 @@ namespace Time
         public TimePeriod(uint hours, byte minutes, byte seconds = 0)
         {
             this._seconds = hours * 3600 + checkValue(minutes, 0, 59) * 60 + checkValue(seconds,0,59);
-            
-
 
         }
 
@@ -32,15 +30,25 @@ namespace Time
 
         public TimePeriod(long seconds)
         {
+            if (seconds < 0) throw new ArgumentException();
             this._seconds = seconds;
         }
 
-        /*public TimePeriod(Time t1, Time t2)
+        public TimePeriod(Time t1, Time t2)
         {
-            this._seconds = 
-        }*/
+            var firstTime = ParseTimeToSeconds(t1);
+            var secondTime = ParseTimeToSeconds(t2);
+            this._seconds = Math.Abs(firstTime - secondTime);
+        }
 
-        //public override string ToString() => $"{this.Hour.ToString("D2")}:{this.Minute.ToString("D2")}:{this.Second.ToString("D2")}";
+        public override string ToString()
+        {
+            var hours = Seconds / 3600;
+            var minutes = (Seconds / 60) % 60;
+            var seconds = Seconds % 60;
+
+            return $"{hours.ToString("D2")}:{minutes.ToString("D2")}:{seconds.ToString("D2")}";
+        }
 
         private static byte checkValue(byte value, int min, int max)
         {
@@ -49,5 +57,34 @@ namespace Time
             else
                 throw new ArgumentException();
         }
+
+        private static long ParseTimeToSeconds(Time t1) => t1.Hour * 3600 + t1.Minute * 60 + t1.Second;
+
+        public bool Equals(TimePeriod other)
+        {
+            if (Object.ReferenceEquals(this, other)) return true;
+
+            return Seconds == other.Seconds;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is TimePeriod)
+            {
+                return Equals((TimePeriod)obj);
+            }
+            else
+                return false;
+        }
+
+        public static bool Equals(TimePeriod t1, TimePeriod t2)
+        {
+            return t1.Equals(t2);
+        }
+
+        public override int GetHashCode() => Seconds.GetHashCode();
+
+        public static bool operator ==(TimePeriod t1, TimePeriod t2) => Equals(t1, t2);
+        public static bool operator !=(TimePeriod t1, TimePeriod t2) => !(t1 == t2);
     }
 }
