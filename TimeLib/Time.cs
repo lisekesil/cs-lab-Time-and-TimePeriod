@@ -50,10 +50,8 @@ namespace Time
             }
         }
 
-        public override string ToString()
-        {
-            return $"{this.Hour.ToString("D2")}:{this.Minute.ToString("D2")}:{this.Second.ToString("D2")}";
-        }
+        public override string ToString() => $"{this.Hour.ToString("D2")}:{this.Minute.ToString("D2")}:{this.Second.ToString("D2")}";
+        
 
         public bool Equals(Time other)
         {
