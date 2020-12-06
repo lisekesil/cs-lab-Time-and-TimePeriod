@@ -41,13 +41,13 @@ namespace Time
             this._minute = checkValue(byte.Parse(timeArr[1]),0,59);
             this._second = checkValue(byte.Parse(timeArr[2]),0,59);
 
-            byte checkValue(byte value, int min, int max)
+/*            byte checkValue(byte value, int min, int max)
             {
                 if (value >= min && value <= max)
                     return value;
                 else
                     throw new ArgumentException();
-            }
+            }*/
         }
 
         public override string ToString() => $"{this.Hour.ToString("D2")}:{this.Minute.ToString("D2")}:{this.Second.ToString("D2")}";
@@ -98,16 +98,16 @@ namespace Time
         public static bool operator >(Time t1, Time t2) => t1.CompareTo(t2) > 0;
         public static bool operator <=(Time t1, Time t2) => t1.CompareTo(t2) <= 0;
         public static bool operator >=(Time t1, Time t2) => t1.CompareTo(t2) >= 0;
-        
 
 
 
-        /* private byte checkValue(byte value, int min, int max)
-         {
-             if (value >= min && value <= max)
-                 return value;
-             else
-                 throw new ArgumentException();
-         }*/
+
+        private static byte checkValue(byte value, int min, int max)
+        {
+            if (value >= min && value <= max)
+                return value;
+            else
+                throw new ArgumentException();
+        }
     }
 }
