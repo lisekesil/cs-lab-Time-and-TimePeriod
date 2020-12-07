@@ -19,11 +19,21 @@ namespace Time
         public TimePeriod(string timePeriod)
         {
             string[] timePeriodArr = timePeriod.Split(":");
+            var minutes = 0;
+            var seconds = 0;
 
             var hours = int.Parse(timePeriodArr[0]);
             if (hours < 0) throw new ArgumentException();
-            var minutes = checkValue(byte.Parse(timePeriodArr[1]), 0, 59);
-            var seconds = checkValue(byte.Parse(timePeriodArr[2]), 0, 59);
+            
+            if (timePeriodArr.Length > 1)
+            {
+                minutes = checkValue(byte.Parse(timePeriodArr[1]), 0, 59);
+            }
+
+            if(timePeriodArr.Length > 2)
+            {
+                seconds = checkValue(byte.Parse(timePeriodArr[2]), 0, 59);
+            }
 
             this._seconds = hours * 3600 + minutes * 60 + seconds;
         }
@@ -81,18 +91,28 @@ namespace Time
             return this.Seconds.CompareTo(other.Seconds);
         }
 
-        public static bool operator ==(TimePeriod t1, TimePeriod t2) => Equals(t1, t2);
-        public static bool operator !=(TimePeriod t1, TimePeriod t2) => !(t1 == t2);
+        public static bool operator ==(TimePeriod tp1, TimePeriod tp2) => Equals(tp1, tp2);
+        public static bool operator !=(TimePeriod tp1, TimePeriod tp2) => !(tp1 == tp2);
 
-        public static bool operator <(TimePeriod t1, TimePeriod t2) => t1.CompareTo(t2) < 0;
-        public static bool operator >(TimePeriod t1, TimePeriod t2) => t1.CompareTo(t2) > 0;
-        public static bool operator <=(TimePeriod t1, TimePeriod t2) => t1.CompareTo(t2) <= 0;
-        public static bool operator >=(TimePeriod t1, TimePeriod t2) => t1.CompareTo(t2) >= 0;
+        public static bool operator <(TimePeriod tp1, TimePeriod tp2) => tp1.CompareTo(tp2) < 0;
+        public static bool operator >(TimePeriod tp1, TimePeriod tp2) => tp1.CompareTo(tp2) > 0;
+        public static bool operator <=(TimePeriod tp1, TimePeriod tp2) => tp1.CompareTo(tp2) <= 0;
+        public static bool operator >=(TimePeriod tp1, TimePeriod tp2) => tp1.CompareTo(tp2) >= 0;
 
-        public static TimePeriod operator +(TimePeriod t1, TimePeriod t2) => t1.Plus(t2);
+        public static TimePeriod operator +(TimePeriod tp1, TimePeriod tp2) => tp1.Plus(tp2);
+        public static TimePeriod operator -(TimePeriod tp1, TimePeriod tp2) => tp1.Plus(tp2);
 
         public TimePeriod Plus(TimePeriod otherTimePeriod) => new TimePeriod(this.Seconds + otherTimePeriod.Seconds);
         public static TimePeriod Plus(TimePeriod tp1, TimePeriod tp2) => new TimePeriod(tp1.Seconds + tp2.Seconds);
+
+        public TimePeriod Minus(TimePeriod othertimePeriod)
+        {
+            var newSeconds = this.Seconds + othertimePeriod.Seconds;
+            if (newSeconds < 0) throw new ArgumentException("Nie można odjąć większego przedziału od mniejszego");
+            return new TimePeriod(newSeconds);
+        }
+
+        public static TimePeriod Minus(TimePeriod tp1, TimePeriod tp2) => tp1.Minus(tp2);
 
         private static byte checkValue(byte value, int min, int max)
         {
