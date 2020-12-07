@@ -21,13 +21,6 @@ namespace Time
             this._minute = checkValue(minute, 0, 59);
             this._second = checkValue(second, 0, 59);
 
-            byte checkValue(byte value, int min, int max)
-            {
-                if (value >= min && value <= max)
-                    return value;
-                else
-                    throw new ArgumentException();
-            }
         }
 
         /// <summary>
@@ -113,7 +106,7 @@ namespace Time
             if (value >= min && value <= max)
                 return value;
             else
-                throw new ArgumentException();
+                throw new ArgumentException("Argument " + nameof(value) + "nie mieści się w zakresie");
         }
     }
 }

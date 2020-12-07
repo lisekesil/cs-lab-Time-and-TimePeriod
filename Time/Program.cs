@@ -13,7 +13,7 @@ namespace Time
             Time t2 = new Time("12:00:59");
             Console.WriteLine("Time po podaniu stringa do konstruktora: " + t2);
 
-            Time t3 = new Time(22, 0, 33);
+            Time t3 = new Time(22, 0, 63);
             Console.WriteLine("Time po podaniu trzech argumentów do konstruktora: " + t3);
 
             TimePeriod tp1 = new TimePeriod();
