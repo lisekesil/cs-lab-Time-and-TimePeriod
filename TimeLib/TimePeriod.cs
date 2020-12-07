@@ -100,14 +100,14 @@ namespace Time
         public static bool operator >=(TimePeriod tp1, TimePeriod tp2) => tp1.CompareTo(tp2) >= 0;
 
         public static TimePeriod operator +(TimePeriod tp1, TimePeriod tp2) => tp1.Plus(tp2);
-        public static TimePeriod operator -(TimePeriod tp1, TimePeriod tp2) => tp1.Plus(tp2);
+        public static TimePeriod operator -(TimePeriod tp1, TimePeriod tp2) => tp1.Minus(tp2);
 
         public TimePeriod Plus(TimePeriod otherTimePeriod) => new TimePeriod(this.Seconds + otherTimePeriod.Seconds);
         public static TimePeriod Plus(TimePeriod tp1, TimePeriod tp2) => new TimePeriod(tp1.Seconds + tp2.Seconds);
 
         public TimePeriod Minus(TimePeriod othertimePeriod)
         {
-            var newSeconds = this.Seconds + othertimePeriod.Seconds;
+            var newSeconds = this.Seconds - othertimePeriod.Seconds;
             if (newSeconds < 0) throw new ArgumentException("Nie można odjąć większego przedziału od mniejszego");
             return new TimePeriod(newSeconds);
         }

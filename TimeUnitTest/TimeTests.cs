@@ -206,5 +206,139 @@ namespace TimeUnitTest
         }
 
         #endregion
+
+        #region -------Time Compare--------
+
+        [TestMethod]
+        [DataRow((byte)11, (byte)1, (byte)33, (byte)10, (byte)10, (byte)50)]
+        [DataRow((byte)0, (byte)0, (byte)6, (byte)0, (byte)0, (byte)5)]
+        public void TimeGreaterThanOtherTime(byte h1, byte m1, byte s1, byte h2, byte m2, byte s2)
+        {
+            var t1 = new Time.Time(h1, m1, s1);
+            var t2 = new Time.Time(h2, m2, s2);
+
+            Assert.IsTrue( t1 > t2);
+        }
+
+        [TestMethod]
+        [DataRow((byte)11, (byte)1, (byte)33, (byte)10, (byte)10, (byte)50)]
+        [DataRow((byte)0, (byte)0, (byte)6, (byte)0, (byte)0, (byte)5)]
+        [DataRow((byte)0, (byte)0, (byte)6, (byte)0, (byte)0, (byte)6)]
+        public void TimeGreaterOrEqualThanOtherTime(byte h1, byte m1, byte s1, byte h2, byte m2, byte s2)
+        {
+            var t1 = new Time.Time(h1, m1, s1);
+            var t2 = new Time.Time(h2, m2, s2);
+
+            Assert.IsTrue( t1 >= t2);
+        }
+
+        [TestMethod]
+        [DataRow((byte)11, (byte)1, (byte)33, (byte)11, (byte)10, (byte)50)]
+        [DataRow((byte)0, (byte)0, (byte)6, (byte)20, (byte)0, (byte)5)]
+        public void TimeLesserThanOtherTime(byte h1, byte m1, byte s1, byte h2, byte m2, byte s2)
+        {
+            var t1 = new Time.Time(h1, m1, s1);
+            var t2 = new Time.Time(h2, m2, s2);
+
+            Assert.IsTrue( t1 < t2);
+        }
+
+        [TestMethod]
+        [DataRow((byte)11, (byte)1, (byte)33, (byte)11, (byte)10, (byte)50)]
+        [DataRow((byte)0, (byte)0, (byte)6, (byte)20, (byte)0, (byte)5)]
+        [DataRow((byte)0, (byte)0, (byte)6, (byte)0, (byte)0, (byte)6)]
+        public void TimeLesserOrEqualThanOtherTime(byte h1, byte m1, byte s1, byte h2, byte m2, byte s2)
+        {
+            var t1 = new Time.Time(h1, m1, s1);
+            var t2 = new Time.Time(h2, m2, s2);
+
+            Assert.IsTrue(t1 <= t2);
+        }
+
+        #endregion
+
+        #region -------TimePeriod Compare-------
+
+        [TestMethod]
+        [DataRow((long)2115, (long)2114)]
+        [DataRow((long)21999999999915, (long)2112222224)]
+        public void TimePeriodGreaterThanOtherTimePeriod(long s1, long s2)
+        {
+            var tp1 = new TimePeriod(s1);
+            var tp2 = new TimePeriod(s2);
+
+            Assert.IsTrue(tp1 > tp2);
+        }
+
+        [TestMethod]
+        [DataRow((long)2115, (long)2114)]
+        [DataRow((long)21999999999915, (long)2112222224)]
+        [DataRow((long)0, (long)0)]
+        public void TimePeriodGreaterOrEqualThanOtherTimePeriod(long s1, long s2)
+        {
+            var tp1 = new TimePeriod(s1);
+            var tp2 = new TimePeriod(s2);
+
+            Assert.IsTrue(tp1 >= tp2);
+        }
+
+        [TestMethod]
+        [DataRow((long)215, (long)2114)]
+        [DataRow((long)2199915, (long)2112222224)]
+        public void TimePeriodLesserThanOtherTimePeriod(long s1, long s2)
+        {
+            var tp1 = new TimePeriod(s1);
+            var tp2 = new TimePeriod(s2);
+
+            Assert.IsTrue(tp1 < tp2);
+        }   
+        
+        [TestMethod]
+        [DataRow((long)215, (long)2114)]
+        [DataRow((long)2199915, (long)2112222224)]
+        [DataRow((long)0, (long)0)]
+        public void TimePeriodLesserOrEqualThanOtherTimePeriod(long s1, long s2)
+        {
+            var tp1 = new TimePeriod(s1);
+            var tp2 = new TimePeriod(s2);
+
+            Assert.IsTrue(tp1 <= tp2);
+        }
+        #endregion
+
+        #region -------Plus and Minus operators-------
+        [TestMethod]
+        [DataRow((byte)0, (byte)0,(byte)53, (long)3600, "1:00:53")]
+        [DataRow((byte)23, (byte)0,(byte)0, (long)8000, "1:13:20")]
+        public void TimePlusTimePeriod(byte h1,byte m1, byte s1, long s2, string expectedTime)
+        {
+            var time = new Time.Time(h1, m1, s1);
+            var timePeriod = new TimePeriod(s2);
+
+            Assert.AreEqual(time + timePeriod, new Time.Time(expectedTime));
+        }
+
+        [TestMethod]
+        [DataRow((long)4000, (long)4000,(long) 8000)]
+        [DataRow((long)4000, (long)2222000,(long) 2226000)]
+        public void TimePeriodPlusTimePeriod(long s1, long s2, long s3)
+        {
+            var tp1 = new TimePeriod(s1);
+            var tp2 = new TimePeriod(s2);
+
+            Assert.AreEqual(tp1 + tp2, new TimePeriod(s3));
+        }  
+        
+        [TestMethod]
+        [DataRow((long)4000, (long)4000,(long) 0)]
+        [DataRow((long)4000, (long)2000,(long) 2000)]
+        public void TimePeriodMinusTimePeriod(long s1, long s2, long s3)
+        {
+            var tp1 = new TimePeriod(s1);
+            var tp2 = new TimePeriod(s2);
+
+            Assert.AreEqual(tp1 - tp2, new TimePeriod(s3));
+        }
+        #endregion
     }
 }
