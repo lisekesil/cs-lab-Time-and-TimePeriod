@@ -9,13 +9,22 @@ namespace Time
         private long _seconds;
         public readonly long Seconds => _seconds;
 
-
+        /// <summary>
+        /// konstruktor struktury z trzema argumentami
+        /// </summary>
+        /// <param name="hours">liczba godzin</param>
+        /// <param name="minutes">liczba minut zakres 0-59</param>
+        /// <param name="seconds">liczba sekund zkares 0-59</param>
         public TimePeriod(uint hours, byte minutes, byte seconds = 0)
         {
             this._seconds = hours * 3600 + checkValue(minutes, 0, 59) * 60 + checkValue(seconds,0,59);
 
         }
 
+        /// <summary>
+        /// konstruktor struktuey z argumentem w postaci string hh:mm:ss
+        /// </summary>
+        /// <param name="timePeriod"> format stringa: hh:mm:ss</param>
         public TimePeriod(string timePeriod)
         {
             string[] timePeriodArr = timePeriod.Split(":");
@@ -38,12 +47,21 @@ namespace Time
             this._seconds = hours * 3600 + minutes * 60 + seconds;
         }
 
+        /// <summary>
+        /// konstruktor struktury z liczbą sekund
+        /// </summary>
+        /// <param name="seconds">liczba sekund</param>
         public TimePeriod(long seconds)
         {
             if (seconds < 0) throw new ArgumentException();
             this._seconds = seconds;
         }
 
+        /// <summary>
+        /// konstrutktor struktury z dwoma argumentami typu Time, oblicza różnicę czasu
+        /// </summary>
+        /// <param name="t1"></param>
+        /// <param name="t2"></param>
         public TimePeriod(Time t1, Time t2)
         {
             var firstTime = ParseTimeToSeconds(t1);
